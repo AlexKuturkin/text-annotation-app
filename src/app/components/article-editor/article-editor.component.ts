@@ -15,7 +15,7 @@ import { FormsModule } from '@angular/forms';
   styleUrl: './article-editor.component.scss',
 })
 export class ArticleEditorComponent implements OnInit, AfterViewInit {
-  @ViewChild('contentEditable', { static: true }) contentEditable!: ElementRef;
+  @ViewChild('contentEditable', { static: true }) contentEditable?: ElementRef;
   article: Article = { id: '', title: '', content: '' };
   annotations: Annotation[] = [];
   showAnnotationForm = false;
@@ -31,7 +31,7 @@ export class ArticleEditorComponent implements OnInit, AfterViewInit {
     private annotationService: AnnotationService,
   ) {}
 
-  ngOnInit() {
+  ngOnInit(): void {
     const id = this.route.snapshot.paramMap.get('id');
     if (id) {
       const existingArticle = this.articleService.getById(id);
@@ -42,19 +42,19 @@ export class ArticleEditorComponent implements OnInit, AfterViewInit {
     }
   }
 
-  ngAfterViewInit() {
+  ngAfterViewInit(): void {
     this.renderAnnotations();
   }
 
-  onTitleChange(event: Event) {
+  onTitleChange(event: Event): void {
     this.article.title = (event.target as HTMLInputElement).value;
   }
 
-  onContentInput(event: Event) {
+  onContentInput(event: Event): void {
     this.article.content = (event.target as HTMLElement).textContent || '';
   }
 
-  onMouseUp() {
+  onMouseUp(): void {
     const selection = window.getSelection();
     if (selection && selection.rangeCount > 0) {
       const range = selection.getRangeAt(0);
@@ -65,7 +65,7 @@ export class ArticleEditorComponent implements OnInit, AfterViewInit {
     }
   }
 
-  addAnnotation() {
+  addAnnotation(): void {
     if (!this.annotationNote.trim()) {
       return;
     }
@@ -85,7 +85,7 @@ export class ArticleEditorComponent implements OnInit, AfterViewInit {
     }
 
     if (this.selectedRange) {
-      const container = this.contentEditable.nativeElement;
+      const container = this.contentEditable?.nativeElement;
       const startOffset = this.getOffset(
         container,
         this.selectedRange.startContainer,
@@ -115,21 +115,21 @@ export class ArticleEditorComponent implements OnInit, AfterViewInit {
     }
   }
 
-  cancelAnnotation() {
+  cancelAnnotation(): void {
     this.showAnnotationForm = false;
     this.annotationNote = '';
     this.editingAnnotation = null;
     window.getSelection()?.removeAllRanges();
   }
 
-  editAnnotation(annotation: Annotation) {
+  editAnnotation(annotation: Annotation): void {
     this.editingAnnotation = annotation;
     this.annotationColor = annotation.color;
     this.annotationNote = annotation.note;
     this.showAnnotationForm = true;
   }
 
-  deleteAnnotation(annotation: Annotation) {
+  deleteAnnotation(annotation: Annotation): void {
     if (confirm('Удалить аннотацию?')) {
       this.annotationService.delete(annotation.id);
       this.annotations = this.annotations.filter((a) => a.id !== annotation.id);
@@ -151,9 +151,13 @@ export class ArticleEditorComponent implements OnInit, AfterViewInit {
     return totalOffset;
   }
 
-  private renderAnnotations() {
-    const container = this.contentEditable.nativeElement;
-    container.innerHTML = this.article.content;
+  private renderAnnotations(): void {
+    const container = this.contentEditable?.nativeElement;
+    if (!container) {
+      return;
+    }
+    container.innerText = this.article.content;
+    container.style.whiteSpace = 'pre-wrap';
 
     this.annotations.forEach((annotation) => {
       const range = document.createRange();
@@ -196,14 +200,17 @@ export class ArticleEditorComponent implements OnInit, AfterViewInit {
     });
   }
 
-  saveArticle() {
-    const container = this.contentEditable.nativeElement;
+  saveArticle(): void {
+    const container = this.contentEditable?.nativeElement;
+    if (!container) {
+      return;
+    }
     this.article.content = container.textContent || '';
     this.articleService.save(this.article);
     this.router.navigate(['/articles']);
   }
 
-  backToList() {
+  backToList(): void {
     this.router.navigate(['/articles']);
   }
 }

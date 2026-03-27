@@ -1,5 +1,14 @@
+:host {
+  display: block;
+  max-width: 800px;
+  margin: 0 auto;
+  box-sizing: border-box;
+}
+
 h1 {
   color: #333;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 button {
@@ -10,7 +19,6 @@ button {
   border: none;
   cursor: pointer;
 }
-
 button:hover {
   background-color: #0056b3;
 }
@@ -24,6 +32,10 @@ li {
   border: 1px solid #ddd;
   margin: 10px 0;
   padding: 10px;
+}
+
+p {
+  white-space: pre-wrap;
 }
 
 p span {

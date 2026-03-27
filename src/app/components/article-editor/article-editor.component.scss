@@ -1,7 +1,21 @@
-input, textarea {
+:host {
+  display: block;
+  max-width: 800px;
+  margin: 0 auto;
+  box-sizing: border-box;
+}
+
+h1 {
+  margin-bottom: 1rem;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+input, textarea, div[contenteditable] {
   display: block;
   margin: 10px 0;
   width: 100%;
+  box-sizing: border-box;
   padding: 8px;
 }
 

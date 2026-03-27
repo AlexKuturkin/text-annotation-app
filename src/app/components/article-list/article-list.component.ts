@@ -1,12 +1,12 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, DestroyRef } from '@angular/core';
 import { Router } from '@angular/router';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ArticleService } from '../../services/article.service';
 import { AnnotationService } from '../../services/annotation.service';
 import { Article } from '../../models/article.model';
 import { Annotation } from '../../models/annotation.model';
 import { CommonModule } from '@angular/common';
-import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-article-list',
@@ -15,25 +15,23 @@ import { Subscription } from 'rxjs';
   templateUrl: './article-list.component.html',
   styleUrl: './article-list.component.scss',
 })
-export class ArticleListComponent implements OnInit, OnDestroy {
+export class ArticleListComponent implements OnInit {
   articles: Article[] = [];
-  private subscription: Subscription = new Subscription();
 
   constructor(
     private articleService: ArticleService,
     private router: Router,
     private annotationService: AnnotationService,
     private sanitizer: DomSanitizer,
+    private destroyRef: DestroyRef,
   ) {}
 
-  ngOnInit() {
-    this.subscription = this.articleService.articles$.subscribe((articles) => {
-      this.articles = articles;
-    });
-  }
-
-  ngOnDestroy() {
-    this.subscription.unsubscribe();
+  ngOnInit(): void {
+    this.articleService.articles$
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((articles) => {
+        this.articles = articles;
+      });
   }
 
   getAnnotatedContent(article: Article): SafeHtml {
@@ -62,7 +60,7 @@ export class ArticleListComponent implements OnInit, OnDestroy {
     return this.sanitizer.bypassSecurityTrustHtml(content);
   }
 
-  createArticle() {
+  createArticle(): void {
     const newArticle: Article = {
       id: Date.now().toString(),
       title: 'New Article',
@@ -72,11 +70,11 @@ export class ArticleListComponent implements OnInit, OnDestroy {
     this.router.navigate(['/articles', newArticle.id]);
   }
 
-  editArticle(id: string) {
+  editArticle(id: string): void {
     this.router.navigate(['/articles', id]);
   }
 
-  deleteArticle(id: string) {
+  deleteArticle(id: string): void {
     if (confirm('Удалить статью?')) {
       this.articleService.delete(id);
     }
