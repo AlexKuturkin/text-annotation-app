@@ -161,6 +161,8 @@ export class ArticleEditorComponent implements OnInit, AfterViewInit {
   }
 
   saveArticle() {
+    const container = this.contentEditable.nativeElement;
+    this.article.content = container.textContent || '';
     this.articleService.save(this.article);
     this.router.navigate(['/articles']);
   }

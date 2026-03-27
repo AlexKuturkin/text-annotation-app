@@ -12,11 +12,7 @@ export class ArticleService {
   }
 
   getAll(): Article[] {
-    const articles = JSON.parse(localStorage.getItem(this.storageKey) || '[]');
-    articles.forEach((article: Article) => {
-      article.content = this.stripHtml(article.content);
-    });
-    return articles;
+    return JSON.parse(localStorage.getItem(this.storageKey) || '[]');
   }
 
   getById(id: string): Article | undefined {
@@ -39,11 +35,5 @@ export class ArticleService {
     const articles = this.getAll().filter((a) => a.id !== id);
     localStorage.setItem(this.storageKey, JSON.stringify(articles));
     this.articlesSubject.next(articles);
-  }
-
-  private stripHtml(html: string): string {
-    const div = document.createElement('div');
-    div.innerHTML = html;
-    return div.textContent || div.innerText || '';
   }
 }
