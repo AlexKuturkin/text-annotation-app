@@ -20,6 +20,7 @@ export class ArticleEditorComponent implements OnInit, AfterViewInit {
   annotations: Annotation[] = [];
   showAnnotationForm = false;
   selectedRange: Range | null = null;
+  editingAnnotation: Annotation | null = null;
   annotationColor = '#ffff00';
   annotationNote = '';
 
@@ -65,7 +66,25 @@ export class ArticleEditorComponent implements OnInit, AfterViewInit {
   }
 
   addAnnotation() {
-    if (this.selectedRange && this.annotationNote.trim()) {
+    if (!this.annotationNote.trim()) {
+      return;
+    }
+
+    if (this.editingAnnotation) {
+      const annotation = this.editingAnnotation;
+      annotation.color = this.annotationColor;
+      annotation.note = this.annotationNote;
+
+      this.annotationService.save(annotation);
+      this.annotations = this.annotations.map((a) => (a.id === annotation.id ? annotation : a));
+      this.renderAnnotations();
+      this.editingAnnotation = null;
+      this.showAnnotationForm = false;
+      this.annotationNote = '';
+      return;
+    }
+
+    if (this.selectedRange) {
       const container = this.contentEditable.nativeElement;
       const startOffset = this.getOffset(
         container,
@@ -99,7 +118,23 @@ export class ArticleEditorComponent implements OnInit, AfterViewInit {
   cancelAnnotation() {
     this.showAnnotationForm = false;
     this.annotationNote = '';
+    this.editingAnnotation = null;
     window.getSelection()?.removeAllRanges();
+  }
+
+  editAnnotation(annotation: Annotation) {
+    this.editingAnnotation = annotation;
+    this.annotationColor = annotation.color;
+    this.annotationNote = annotation.note;
+    this.showAnnotationForm = true;
+  }
+
+  deleteAnnotation(annotation: Annotation) {
+    if (confirm('Удалить аннотацию?')) {
+      this.annotationService.delete(annotation.id);
+      this.annotations = this.annotations.filter((a) => a.id !== annotation.id);
+      this.renderAnnotations();
+    }
   }
 
   private getOffset(container: Node, node: Node, offset: number): number {

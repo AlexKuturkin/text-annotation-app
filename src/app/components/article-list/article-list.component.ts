@@ -77,6 +77,8 @@ export class ArticleListComponent implements OnInit, OnDestroy {
   }
 
   deleteArticle(id: string) {
-    this.articleService.delete(id);
+    if (confirm('Удалить статью?')) {
+      this.articleService.delete(id);
+    }
   }
 }

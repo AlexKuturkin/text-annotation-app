@@ -24,5 +24,20 @@
     <button (click)="cancelAnnotation()">Cancel</button>
   </div>
 }
+@if (annotations.length > 0) {
+  <div class="annotation-list">
+    <h3>Annotations</h3>
+    <ul>
+      @for (ann of annotations; track ann.id) {
+        <li>
+          <span class="annotation-badge" [style.background-color]="ann.color"> </span>
+          {{ ann.note }} ({{ ann.startOffset }}-{{ ann.endOffset }})
+          <button (click)="editAnnotation(ann)">Edit</button>
+          <button (click)="deleteAnnotation(ann)">Delete</button>
+        </li>
+      }
+    </ul>
+  </div>
+}
 <button (click)="saveArticle()">Save</button>
 <button (click)="backToList()">Back to List</button>

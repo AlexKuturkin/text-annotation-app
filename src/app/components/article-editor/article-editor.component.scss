@@ -24,3 +24,31 @@ button {
 button:hover {
   background-color: #218838;
 }
+
+.annotation-list ul {
+  list-style: none;
+  padding: 0;
+}
+
+.annotation-list li {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 6px;
+}
+
+.annotation-badge {
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  border-radius: 2px;
+  cursor: pointer;
+}
+
+.annotation-list button {
+  background-color: #dc3545;
+}
+
+.annotation-list button:hover {
+  background-color: #c82333;
+}
