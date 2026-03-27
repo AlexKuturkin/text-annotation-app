@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
+import { Annotation, Article } from '@models';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { Article } from '../models/article.model';
-import { Annotation } from '../models/annotation.model';
 
 const ARTICLES_KEY = 'articles';
 const ANNOTATIONS_KEY = 'annotations';

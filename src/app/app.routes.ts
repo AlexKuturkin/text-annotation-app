@@ -1,7 +1,6 @@
 import { Routes } from '@angular/router';
-import { ArticleListComponent } from './components/article-list/article-list.component';
-import { ArticleEditorComponent } from './components/article-editor/article-editor.component';
-import { RoutePaths } from './models/route-paths.model';
+import { ArticleEditorComponent, ArticleListComponent } from '@components';
+import { RoutePaths } from '@models';
 
 export const routes: Routes = [
   { path: '', redirectTo: `/${RoutePaths.Articles}`, pathMatch: 'full' },

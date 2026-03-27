@@ -1,11 +1,9 @@
 import { Component, OnInit, ElementRef, ViewChild, AfterViewInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { StoreService } from '../../services/store.service';
-import { RoutePaths } from '../../models/route-paths.model';
-import { Article } from '../../models/article.model';
-import { Annotation } from '../../models/annotation.model';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { Annotation, Article, RoutePaths } from '@models';
+import { StoreService } from '@services';
 
 @Component({
   selector: 'app-article-editor',

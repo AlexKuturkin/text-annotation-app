@@ -1,7 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { ArticleListComponent } from './components/article-list';
-import { ArticleEditorComponent } from './components/article-editor';
+import { ArticleEditorComponent, ArticleListComponent } from '@components';
 
 const routes: Routes = [
   { path: '', redirectTo: '/articles', pathMatch: 'full' },

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
+import { Article } from '@models';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { Article } from '../models/article.model';
 
 @Injectable({ providedIn: 'root' })
 export class ArticleService {

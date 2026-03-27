@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
-import { Annotation } from '../models/annotation.model';
+import { Annotation } from '@models';
+
 
 @Injectable({ providedIn: 'root' })
 export class AnnotationService {

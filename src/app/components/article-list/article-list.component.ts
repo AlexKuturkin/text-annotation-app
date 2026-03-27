@@ -2,10 +2,9 @@ import { Component, OnInit, DestroyRef } from '@angular/core';
 import { Router } from '@angular/router';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { StoreService } from '../../services/store.service';
-import { RoutePaths } from '../../models/route-paths.model';
-import { Article } from '../../models/article.model';
 import { CommonModule } from '@angular/common';
+import { Article, RoutePaths } from '@models';
+import { StoreService } from '@services';
 
 @Component({
   selector: 'app-article-list',
