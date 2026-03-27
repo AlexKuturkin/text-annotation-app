@@ -2,10 +2,9 @@ import { Component, OnInit, DestroyRef } from '@angular/core';
 import { Router } from '@angular/router';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { ArticleService } from '../../services/article.service';
-import { AnnotationService } from '../../services/annotation.service';
+import { StoreService } from '../../services/store.service';
+import { RoutePaths } from '../../models/route-paths.model';
 import { Article } from '../../models/article.model';
-import { Annotation } from '../../models/annotation.model';
 import { CommonModule } from '@angular/common';
 
 @Component({
@@ -19,23 +18,20 @@ export class ArticleListComponent implements OnInit {
   articles: Article[] = [];
 
   constructor(
-    private articleService: ArticleService,
+    private store: StoreService,
     private router: Router,
-    private annotationService: AnnotationService,
     private sanitizer: DomSanitizer,
     private destroyRef: DestroyRef,
   ) {}
 
   ngOnInit(): void {
-    this.articleService.articles$
-      .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe((articles) => {
-        this.articles = articles;
-      });
+    this.store.articles$.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((articles) => {
+      this.articles = articles;
+    });
   }
 
   getAnnotatedContent(article: Article): SafeHtml {
-    const annotations = this.annotationService.getByArticle(article.id);
+    const annotations = this.store.getAnnotationsByArticle(article.id);
     if (annotations.length === 0) {
       return this.sanitizer.bypassSecurityTrustHtml(article.content);
     }
@@ -66,17 +62,17 @@ export class ArticleListComponent implements OnInit {
       title: 'New Article',
       content: '',
     };
-    this.articleService.save(newArticle);
-    this.router.navigate(['/articles', newArticle.id]);
+    this.store.saveArticle(newArticle);
+    this.router.navigate([`/${RoutePaths.Articles}`, newArticle.id]);
   }
 
   editArticle(id: string): void {
-    this.router.navigate(['/articles', id]);
+    this.router.navigate([`/${RoutePaths.Articles}`, id]);
   }
 
   deleteArticle(id: string): void {
     if (confirm('Удалить статью?')) {
-      this.articleService.delete(id);
+      this.store.deleteArticle(id);
     }
   }
 }

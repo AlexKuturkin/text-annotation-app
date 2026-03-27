@@ -1,7 +1,7 @@
 import { Component, OnInit, ElementRef, ViewChild, AfterViewInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { ArticleService } from '../../services/article.service';
-import { AnnotationService } from '../../services/annotation.service';
+import { StoreService } from '../../services/store.service';
+import { RoutePaths } from '../../models/route-paths.model';
 import { Article } from '../../models/article.model';
 import { Annotation } from '../../models/annotation.model';
 import { CommonModule } from '@angular/common';
@@ -27,17 +27,16 @@ export class ArticleEditorComponent implements OnInit, AfterViewInit {
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    private articleService: ArticleService,
-    private annotationService: AnnotationService,
+    private store: StoreService,
   ) {}
 
   ngOnInit(): void {
     const id = this.route.snapshot.paramMap.get('id');
     if (id) {
-      const existingArticle = this.articleService.getById(id);
+      const existingArticle = this.store.getArticleById(id);
       if (existingArticle) {
         this.article = { ...existingArticle };
-        this.annotations = this.annotationService.getByArticle(id);
+        this.annotations = this.store.getAnnotationsByArticle(id);
       }
     }
   }
@@ -75,7 +74,7 @@ export class ArticleEditorComponent implements OnInit, AfterViewInit {
       annotation.color = this.annotationColor;
       annotation.note = this.annotationNote;
 
-      this.annotationService.save(annotation);
+      this.store.saveAnnotation(annotation);
       this.annotations = this.annotations.map((a) => (a.id === annotation.id ? annotation : a));
       this.renderAnnotations();
       this.editingAnnotation = null;
@@ -106,7 +105,7 @@ export class ArticleEditorComponent implements OnInit, AfterViewInit {
         note: this.annotationNote,
       };
 
-      this.annotationService.save(annotation);
+      this.store.saveAnnotation(annotation);
       this.annotations.push(annotation);
       this.renderAnnotations();
       this.showAnnotationForm = false;
@@ -131,7 +130,7 @@ export class ArticleEditorComponent implements OnInit, AfterViewInit {
 
   deleteAnnotation(annotation: Annotation): void {
     if (confirm('Удалить аннотацию?')) {
-      this.annotationService.delete(annotation.id);
+      this.store.deleteAnnotation(annotation.id);
       this.annotations = this.annotations.filter((a) => a.id !== annotation.id);
       this.renderAnnotations();
     }
@@ -206,11 +205,11 @@ export class ArticleEditorComponent implements OnInit, AfterViewInit {
       return;
     }
     this.article.content = container.textContent || '';
-    this.articleService.save(this.article);
-    this.router.navigate(['/articles']);
+    this.store.saveArticle(this.article);
+    this.router.navigate([`/${RoutePaths.Articles}`]);
   }
 
   backToList(): void {
-    this.router.navigate(['/articles']);
+    this.router.navigate([`/${RoutePaths.Articles}`]);
   }
 }

@@ -15,8 +15,8 @@ export class ArticleService {
     return JSON.parse(localStorage.getItem(this.storageKey) || '[]');
   }
 
-  getById(id: string): Article | undefined {
-    return this.getAll().find((a) => a.id === id);
+  getById(id: string): Article | null {
+    return this.getAll().find((a) => a.id === id) || null;
   }
 
   save(article: Article) {
