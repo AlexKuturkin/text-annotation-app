@@ -1,17 +1,17 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { AnnotationTooltip } from './annotation-tooltip';
+import { AnnotationTooltipComponent } from './annotation-tooltip.component';
 
-describe('AnnotationTooltip', () => {
-  let component: AnnotationTooltip;
-  let fixture: ComponentFixture<AnnotationTooltip>;
+describe('AnnotationTooltipComponent', () => {
+  let component: AnnotationTooltipComponent;
+  let fixture: ComponentFixture<AnnotationTooltipComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [AnnotationTooltip],
+      imports: [AnnotationTooltipComponent],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(AnnotationTooltip);
+    fixture = TestBed.createComponent(AnnotationTooltipComponent);
     component = fixture.componentInstance;
     await fixture.whenStable();
   });

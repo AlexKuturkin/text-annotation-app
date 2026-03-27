@@ -1,17 +1,17 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ArticleEditor } from './article-editor';
+import { ArticleEditorComponent } from './article-editor.component';
 
-describe('ArticleEditor', () => {
-  let component: ArticleEditor;
-  let fixture: ComponentFixture<ArticleEditor>;
+describe('ArticleEditorComponent', () => {
+  let component: ArticleEditorComponent;
+  let fixture: ComponentFixture<ArticleEditorComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [ArticleEditor],
+      imports: [ArticleEditorComponent],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(ArticleEditor);
+    fixture = TestBed.createComponent(ArticleEditorComponent);
     component = fixture.componentInstance;
     await fixture.whenStable();
   });
