@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 
 @Component({
   selector: 'app-annotation-tooltip',
@@ -7,4 +7,6 @@ import { Component } from '@angular/core';
   templateUrl: './annotation-tooltip.component.html',
   styleUrl: './annotation-tooltip.component.scss',
 })
-export class AnnotationTooltipComponent {}
+export class AnnotationTooltipComponent {
+  @Input() note = '';
+}

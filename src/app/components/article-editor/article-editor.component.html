@@ -1,1 +1,35 @@
-<p>article-editor works!</p>
+<h1>Edit Article</h1>
+<div>
+  <label>Title:</label>
+  <input type="text" [value]="article.title" (input)="onTitleChange($event)" />
+</div>
+<div>
+  <label>Content:</label>
+  <div
+    #contentEditable
+    contenteditable="true"
+    (input)="onContentInput($event)"
+    (mouseup)="onMouseUp()"
+    style="border: 1px solid #ccc; min-height: 200px; padding: 10px;"
+  ></div>
+</div>
+@if (showAnnotationForm) {
+  <div class="annotation-form">
+    <h3>Add Annotation</h3>
+    <label>Color:</label>
+    <input type="color" [(ngModel)]="annotationColor" />
+    <label>Note:</label>
+    <textarea [(ngModel)]="annotationNote"></textarea>
+    <button (click)="addAnnotation()">Add</button>
+    <button (click)="cancelAnnotation()">Cancel</button>
+  </div>
+}
+@if (tooltipVisible) {
+  <app-annotation-tooltip
+    [note]="tooltipNote"
+    [style.left.px]="tooltipPosition.x"
+    [style.top.px]="tooltipPosition.y"
+  ></app-annotation-tooltip>
+}
+<button (click)="saveArticle()">Save</button>
+<button (click)="backToList()">Back to List</button>
