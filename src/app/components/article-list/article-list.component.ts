@@ -1,5 +1,6 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
+import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { ArticleService } from '../../services/article.service';
 import { AnnotationService } from '../../services/annotation.service';
 import { Article } from '../../models/article.model';
@@ -22,6 +23,7 @@ export class ArticleListComponent implements OnInit, OnDestroy {
     private articleService: ArticleService,
     private router: Router,
     private annotationService: AnnotationService,
+    private sanitizer: DomSanitizer,
   ) {}
 
   ngOnInit() {
@@ -34,14 +36,13 @@ export class ArticleListComponent implements OnInit, OnDestroy {
     this.subscription.unsubscribe();
   }
 
-  getAnnotatedContent(article: Article): string {
+  getAnnotatedContent(article: Article): SafeHtml {
     const annotations = this.annotationService.getByArticle(article.id);
     if (annotations.length === 0) {
-      return article.content;
+      return this.sanitizer.bypassSecurityTrustHtml(article.content);
     }
 
     let content = article.content;
-    // Sort annotations by startOffset descending to avoid offset shifts
     annotations.sort((a, b) => b.startOffset - a.startOffset);
 
     for (const annotation of annotations) {
@@ -50,15 +51,15 @@ export class ArticleListComponent implements OnInit, OnDestroy {
         annotation.endOffset > content.length ||
         annotation.startOffset >= annotation.endOffset
       ) {
-        continue; // Skip invalid annotations
+        continue;
       }
       const before = content.substring(0, annotation.startOffset);
       const highlighted = content.substring(annotation.startOffset, annotation.endOffset);
       const after = content.substring(annotation.endOffset);
-      content = `${before}<span style="background-color: ${annotation.color};" title="${annotation.note}">${highlighted}</span>${after}`;
+      content = `${before}<span style="background-color: ${annotation.color}; cursor: pointer;" title="${annotation.note}">${highlighted}</span>${after}`;
     }
 
-    return content;
+    return this.sanitizer.bypassSecurityTrustHtml(content);
   }
 
   createArticle() {

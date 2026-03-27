@@ -150,6 +150,7 @@ export class ArticleEditorComponent implements OnInit, AfterViewInit {
         range.setEnd(endNode, endOffset);
         const span = document.createElement('span');
         span.style.backgroundColor = annotation.color;
+        span.style.cursor = 'pointer';
         span.title = annotation.note; // Simple tooltip
         try {
           range.surroundContents(span);
