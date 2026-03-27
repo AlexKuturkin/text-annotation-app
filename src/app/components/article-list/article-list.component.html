@@ -4,7 +4,7 @@
   @for (article of articles; track article.id) {
     <li>
       <h3>{{ article.title }}</h3>
-      <p>{{ article.content.substring(0, 100) }}...</p>
+      <p [innerHTML]="getAnnotatedContent(article)"></p>
       <button (click)="editArticle(article.id)">Edit</button>
       <button (click)="deleteArticle(article.id)">Delete</button>
     </li>

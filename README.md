@@ -1,52 +1,37 @@
-# TextAnnotationApp
+# Text Annotation App
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 21.2.5.
+Одностраничное приложение (SPA) для создания, редактирования и аннотирования текстовых статей с использованием Angular 21.
 
-## Development server
+## Функционал
 
-To start a local development server, run:
+- **CRUD для статей**: Создание, просмотр, редактирование и удаление статей.
+- **Аннотирование текста**: Выделение фрагментов текста, назначение цвета и текстовых примечаний (аннотаций).
+- **Tooltip**: При наведении на выделенный текст показывается аннотация.
+- **Хранение данных**: Все данные сохраняются в localStorage (эмуляция сервера).
 
-```bash
-ng serve
-```
+## Технологии
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+- Angular 21
+- TypeScript
+- CSS/SCSS
+- RxJS для реактивности
+- Range API для работы с DOM
 
-## Code scaffolding
+## Запуск
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+1. Установите зависимости: `npm install`
+2. Запустите сервер: `npm start`
+3. Откройте `http://localhost:4200`
 
-```bash
-ng generate component component-name
-```
+## Структура проекта
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+- `src/app/models/`: Модели данных (Article, Annotation)
+- `src/app/services/`: Сервисы для работы с данными (ArticleService, AnnotationService)
+- `src/app/components/`: Компоненты (ArticleList, ArticleEditor, AnnotationTooltip)
 
-```bash
-ng generate --help
-```
+## Без сторонних библиотек
 
-## Building
-
-To build the project run:
-
-```bash
-ng build
-```
-
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
-
-## Running unit tests
-
-To execute unit tests with the [Vitest](https://vitest.dev/) test runner, use the following command:
-
-```bash
-ng test
-```
-
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
+Приложение реализовано без использования сторонних библиотек для UI, аннотаций и хранения данных.
 
 ```bash
 ng e2e

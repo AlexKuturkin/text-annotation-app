@@ -6,11 +6,10 @@ import { Article } from '../../models/article.model';
 import { Annotation } from '../../models/annotation.model';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { AnnotationTooltipComponent } from '../annotation-tooltip/annotation-tooltip.component';
 
 @Component({
   selector: 'app-article-editor',
-  imports: [CommonModule, FormsModule, AnnotationTooltipComponent],
+  imports: [CommonModule, FormsModule],
   standalone: true,
   templateUrl: './article-editor.component.html',
   styleUrl: './article-editor.component.scss',
@@ -23,9 +22,6 @@ export class ArticleEditorComponent implements OnInit, AfterViewInit {
   selectedRange: Range | null = null;
   annotationColor = '#ffff00';
   annotationNote = '';
-  tooltipNote = '';
-  tooltipVisible = false;
-  tooltipPosition = { x: 0, y: 0 };
 
   constructor(
     private route: ActivatedRoute,
@@ -106,19 +102,6 @@ export class ArticleEditorComponent implements OnInit, AfterViewInit {
     window.getSelection()?.removeAllRanges();
   }
 
-  onMouseOver(event: MouseEvent) {
-    const target = event.target as HTMLElement;
-    if (target.tagName === 'SPAN' && target.dataset['note']) {
-      this.tooltipNote = target.dataset['note'];
-      this.tooltipPosition = { x: event.clientX + 10, y: event.clientY + 10 };
-      this.tooltipVisible = true;
-    }
-  }
-
-  onMouseOut() {
-    this.tooltipVisible = false;
-  }
-
   private getOffset(container: Node, node: Node, offset: number): number {
     let totalOffset = 0;
     const walker = document.createTreeWalker(container, NodeFilter.SHOW_TEXT, null);
@@ -167,10 +150,12 @@ export class ArticleEditorComponent implements OnInit, AfterViewInit {
         range.setEnd(endNode, endOffset);
         const span = document.createElement('span');
         span.style.backgroundColor = annotation.color;
-        span.dataset['note'] = annotation.note;
-        span.addEventListener('mouseover', (e) => this.onMouseOver(e as MouseEvent));
-        span.addEventListener('mouseout', () => this.onMouseOut());
-        range.surroundContents(span);
+        span.title = annotation.note; // Simple tooltip
+        try {
+          range.surroundContents(span);
+        } catch (e) {
+          // Skip if range partially selects non-Text node
+        }
       }
     });
   }

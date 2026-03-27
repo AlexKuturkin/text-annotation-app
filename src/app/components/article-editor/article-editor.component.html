@@ -24,12 +24,5 @@
     <button (click)="cancelAnnotation()">Cancel</button>
   </div>
 }
-@if (tooltipVisible) {
-  <app-annotation-tooltip
-    [note]="tooltipNote"
-    [style.left.px]="tooltipPosition.x"
-    [style.top.px]="tooltipPosition.y"
-  ></app-annotation-tooltip>
-}
 <button (click)="saveArticle()">Save</button>
 <button (click)="backToList()">Back to List</button>
